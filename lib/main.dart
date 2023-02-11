@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stepper1/splash.dart';
 
+import 'first.dart';
+
 void main() {
   runApp(const HomePage());
 }
@@ -24,7 +26,8 @@ class _HomePageState extends State<HomePage> {
       initialRoute: 'splash',
       routes: {
         '/': (context) => const MyApp(),
-        'splash': (context) => const Splash()
+        'splash': (context) => const Splash(),
+        'homePage': (context) => const First()
       },
     );
   }
@@ -39,6 +42,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int val = 0;
+  GlobalKey<FormState> pageKey = GlobalKey();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController userController = TextEditingController();
+  TextEditingController password2Controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,15 +66,23 @@ class _MyAppState extends State<MyApp> {
         controlsBuilder: (context, _) {
           return Row(
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      if (val < 2) {
-                        val++;
-                      }
-                    });
-                  },
-                  child: (val == 2) ? Text("Home Page") : Text("Continue")),
+              (val == 2)
+                  ? ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('homePage');
+                      },
+                      child: const Text("Home Page"))
+                  : ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (val < 2) {
+                            val++;
+                          }
+                        });
+                      },
+                      child: (val == 2)
+                          ? const Text("Home Page")
+                          : const Text("Continue")),
               const SizedBox(
                 width: 20,
               ),
@@ -84,53 +102,136 @@ class _MyAppState extends State<MyApp> {
         },
         steps: [
           Step(
-              state: (val == 0) ? StepState.editing : StepState.complete,
+              state: (val == 0) ? StepState.indexed : StepState.complete,
               isActive: (val == 0) ? true : false,
               title: const Text("SignUp"),
-              content: Column(
-                children: const [
-                  TextField(
-                    decoration: InputDecoration(
-                        hintText: 'Full Name',
-                        prefixIcon: Icon(Icons.person_outline)),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        hintText: 'Email Id',
-                        prefixIcon: Icon(Icons.email_outlined)),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        hintText: 'Password*',
-                        prefixIcon: Icon(Icons.lock_outline)),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        hintText: 'Confirm Password*',
-                        prefixIcon: Icon(Icons.lock_outline)),
-                  ),
-                ],
+              content: Form(
+                key: pageKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "enter first name..";
+                        }
+                        return null;
+                      },
+                      controller: nameController,
+                      onSaved: (val) {
+                        setState(() {
+                          nameController.text;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'Full Name',
+                          prefixIcon: Icon(Icons.person_outline)),
+                    ),
+                    TextFormField(
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "enter first email..";
+                        }
+                        return null;
+                      },
+                      controller: emailController,
+                      onSaved: (val) {
+                        setState(() {
+                          emailController.text;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'Email Id',
+                          prefixIcon: Icon(Icons.email_outlined)),
+                    ),
+                    TextFormField(
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "enter first password..";
+                        }
+                        return null;
+                      },
+                      controller: passwordController,
+                      onSaved: (val) {
+                        setState(() {
+                          passwordController.text;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'Password*',
+                          prefixIcon: Icon(Icons.lock_outline)),
+                    ),
+                    TextFormField(
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "enter first password..";
+                        }
+                        return null;
+                      },
+                      controller: confirmPasswordController,
+                      onSaved: (val) {
+                        setState(() {
+                          confirmPasswordController.text;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'Confirm Password*',
+                          prefixIcon: Icon(Icons.lock_outline)),
+                    ),
+                  ],
+                ),
               )),
           Step(
-              state: (val == 1) ? StepState.editing : StepState.complete,
+              state: (val == 1)
+                  ? StepState.editing
+                  : (val <= 1)
+                      ? StepState.indexed
+                      : StepState.complete,
               isActive: (val == 1) ? true : false,
               title: const Text("Login"),
               content: Column(
-                children: const [
-                  TextField(
-                    decoration: InputDecoration(
+                children: [
+                  TextFormField(
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return "enter first user..";
+                      }
+                      return null;
+                    },
+                    controller: userController,
+                    onSaved: (val) {
+                      setState(() {
+                        userController.text;
+                      });
+                    },
+                    decoration: const InputDecoration(
                         hintText: 'User Name',
                         prefixIcon: Icon(Icons.person_outline)),
                   ),
-                  TextField(
-                    decoration: InputDecoration(
+                  TextFormField(
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return "enter first password..";
+                      }
+                      return null;
+                    },
+                    controller: password2Controller,
+                    onSaved: (val) {
+                      setState(() {
+                        password2Controller.text;
+                      });
+                    },
+                    decoration: const InputDecoration(
                         hintText: 'Password*',
                         prefixIcon: Icon(Icons.email_outlined)),
                   ),
                 ],
               )),
           Step(
-              state: (val == 2) ? StepState.editing : StepState.complete,
+              state: (val == 2)
+                  ? StepState.editing
+                  : (val <= 2)
+                      ? StepState.indexed
+                      : StepState.complete,
               isActive: (val == 2) ? true : false,
               title: const Text("Home"),
               content: Container())
