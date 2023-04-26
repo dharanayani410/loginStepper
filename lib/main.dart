@@ -43,12 +43,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int val = 0;
   GlobalKey<FormState> pageKey = GlobalKey();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController userController = TextEditingController();
-  TextEditingController password2Controller = TextEditingController();
+  GlobalKey<FormState> page1Key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,6 +55,7 @@ class _MyAppState extends State<MyApp> {
             fontSize: 30,
           ),
         ),
+        centerTitle: true,
         backgroundColor: Colors.red.shade900,
       ),
       body: Stepper(
@@ -69,14 +66,29 @@ class _MyAppState extends State<MyApp> {
               (val == 2)
                   ? ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('homePage');
+                        if (pageKey.currentState!.validate()) {
+                          pageKey.currentState!.save();
+
+                          Navigator.of(context).pushNamed('homePage');
+                        }
+                        if (page1Key.currentState!.validate()) {
+                          page1Key.currentState!.save();
+                          Navigator.of(context).pushNamed('homePage');
+                        }
                       },
                       child: const Text("Home Page"))
                   : ElevatedButton(
                       onPressed: () {
                         setState(() {
+                          if (val < 1) {
+                            if (pageKey.currentState!.validate()) {
+                              val++;
+                            }
+                          }
                           if (val < 2) {
-                            val++;
+                            if (page1Key.currentState!.validate()) {
+                              val++;
+                            }
                           }
                         });
                       },
@@ -116,10 +128,10 @@ class _MyAppState extends State<MyApp> {
                         }
                         return null;
                       },
-                      controller: nameController,
+                      controller: Global.nameController,
                       onSaved: (val) {
                         setState(() {
-                          nameController.text;
+                          Global.nameController.text;
                         });
                       },
                       decoration: const InputDecoration(
@@ -133,10 +145,10 @@ class _MyAppState extends State<MyApp> {
                         }
                         return null;
                       },
-                      controller: emailController,
+                      controller: Global.emailController,
                       onSaved: (val) {
                         setState(() {
-                          emailController.text;
+                          Global.emailController.text;
                         });
                       },
                       decoration: const InputDecoration(
@@ -150,10 +162,10 @@ class _MyAppState extends State<MyApp> {
                         }
                         return null;
                       },
-                      controller: passwordController,
+                      controller: Global.passwordController,
                       onSaved: (val) {
                         setState(() {
-                          passwordController.text;
+                          Global.passwordController.text;
                         });
                       },
                       decoration: const InputDecoration(
@@ -167,10 +179,10 @@ class _MyAppState extends State<MyApp> {
                         }
                         return null;
                       },
-                      controller: confirmPasswordController,
+                      controller: Global.confirmPasswordController,
                       onSaved: (val) {
                         setState(() {
-                          confirmPasswordController.text;
+                          Global.confirmPasswordController.text;
                         });
                       },
                       decoration: const InputDecoration(
@@ -188,43 +200,46 @@ class _MyAppState extends State<MyApp> {
                       : StepState.complete,
               isActive: (val == 1) ? true : false,
               title: const Text("Login"),
-              content: Column(
-                children: [
-                  TextFormField(
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return "enter first user..";
-                      }
-                      return null;
-                    },
-                    controller: userController,
-                    onSaved: (val) {
-                      setState(() {
-                        userController.text;
-                      });
-                    },
-                    decoration: const InputDecoration(
-                        hintText: 'User Name',
-                        prefixIcon: Icon(Icons.person_outline)),
-                  ),
-                  TextFormField(
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return "enter first password..";
-                      }
-                      return null;
-                    },
-                    controller: password2Controller,
-                    onSaved: (val) {
-                      setState(() {
-                        password2Controller.text;
-                      });
-                    },
-                    decoration: const InputDecoration(
-                        hintText: 'Password*',
-                        prefixIcon: Icon(Icons.email_outlined)),
-                  ),
-                ],
+              content: Form(
+                key: page1Key,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "enter first user..";
+                        }
+                        return null;
+                      },
+                      controller: Global.userController,
+                      onSaved: (val) {
+                        setState(() {
+                          Global.user = val!;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'User Name',
+                          prefixIcon: Icon(Icons.person_outline)),
+                    ),
+                    TextFormField(
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "enter first password..";
+                        }
+                        return null;
+                      },
+                      controller: Global.password2Controller,
+                      onSaved: (val) {
+                        setState(() {
+                          Global.password2Controller.text;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'Password*',
+                          prefixIcon: Icon(Icons.lock_outlined)),
+                    ),
+                  ],
+                ),
               )),
           Step(
               state: (val == 2)
@@ -239,4 +254,15 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+}
+
+class Global {
+  static TextEditingController nameController = TextEditingController();
+  static TextEditingController emailController = TextEditingController();
+  static TextEditingController passwordController = TextEditingController();
+  static TextEditingController confirmPasswordController =
+      TextEditingController();
+  static TextEditingController userController = TextEditingController();
+  static TextEditingController password2Controller = TextEditingController();
+  static String user = "";
 }
