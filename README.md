@@ -1,16 +1,9 @@
-# stepper1
+# LogIn Stepper
 
 A new Flutter project.
 
-## Getting Started
+## Screen shots
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src = "https://user-images.githubusercontent.com/121785209/234641339-583d2b7f-8588-465c-8722-a52d70e75b2c.png" height 400px/> |
+<img src = "https://user-images.githubusercontent.com/121785209/234641358-fbd4c891-e53a-4dc4-86d3-f0ad5031b64c.png" height 400px/> |
+<img src = "https://user-images.githubusercontent.com/121785209/234641369-cdbba671-3282-473e-9a0b-13e1ff6ba9ff.png" height 400px/>
